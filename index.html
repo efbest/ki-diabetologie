@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KI in der Diabetologie — Materialien zur Tutorial-Serie</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1a2e4a;
+    --navy-mid: #2c4a6e;
+    --blue-accent: #2e75b6;
+    --blue-light: #e8f0f9;
+    --teal: #0f6e56;
+    --teal-light: #e1f5ee;
+    --text-primary: #1a2e4a;
+    --text-secondary: #4a5568;
+    --text-muted: #718096;
+    --border: #d1dce8;
+    --border-light: #e8edf4;
+    --bg: #f7f9fc;
+    --bg-white: #ffffff;
+    --code-bg: #f0f4f8;
+    --success: #0f6e56;
+    --copy-hover: #1a5a96;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    background: var(--bg);
+    color: var(--text-primary);
+    line-height: 1.7;
+    font-size: 16px;
+  }
+
+  /* ── Header ── */
+  header {
+    background: var(--navy);
+    padding: 3.5rem 2rem 3rem;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -80px;
+    width: 320px; height: 320px;
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 50%;
+  }
+  header::after {
+    content: '';
+    position: absolute;
+    bottom: -40px; right: 60px;
+    width: 200px; height: 200px;
+    border: 1px solid rgba(255,255,255,0.04);
+    border-radius: 50%;
+  }
+  .header-inner {
+    max-width: 800px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+  .header-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.45);
+    margin-bottom: 1rem;
+  }
+  header h1 {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 300;
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    color: #ffffff;
+    line-height: 1.25;
+    margin-bottom: 1.25rem;
+    letter-spacing: -0.01em;
+  }
+  header h1 em {
+    font-style: italic;
+    color: rgba(255,255,255,0.75);
+  }
+  .header-meta {
+    font-size: 14px;
+    color: rgba(255,255,255,0.5);
+    font-weight: 300;
+  }
+  .header-meta a {
+    color: rgba(255,255,255,0.65);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .header-meta a:hover {
+    color: rgba(255,255,255,0.9);
+    border-color: rgba(255,255,255,0.5);
+  }
+
+  /* ── Main layout ── */
+  main {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 3rem 2rem 5rem;
+  }
+
+  /* ── Intro ── */
+  .intro {
+    border-left: 3px solid var(--blue-accent);
+    padding: 1.25rem 1.5rem;
+    background: var(--bg-white);
+    border-radius: 0 8px 8px 0;
+    margin-bottom: 3rem;
+    font-size: 15px;
+    color: var(--text-secondary);
+    line-height: 1.75;
+  }
+  .intro strong {
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+
+  /* ── Section headers ── */
+  .section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--blue-accent);
+    margin-bottom: 0.5rem;
+  }
+  .section-title {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 400;
+    font-size: 1.5rem;
+    color: var(--navy);
+    margin-bottom: 0.4rem;
+    line-height: 1.3;
+  }
+  .section-subtitle {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-bottom: 2rem;
+    font-weight: 300;
+  }
+
+  /* ── Prompt cards ── */
+  .prompt-section {
+    margin-bottom: 3.5rem;
+  }
+  .prompt-card {
+    background: var(--bg-white);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 1.25rem;
+    overflow: hidden;
+    transition: box-shadow 0.2s;
+  }
+  .prompt-card:hover {
+    box-shadow: 0 2px 12px rgba(26,46,74,0.08);
+  }
+  .prompt-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.85rem 1.25rem;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border-light);
+    gap: 1rem;
+  }
+  .prompt-card-header-left {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .prompt-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    padding: 3px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+  }
+  .badge-bad {
+    background: #fff0ed;
+    color: #993c1d;
+    border: 1px solid #f5c4b3;
+  }
+  .badge-better {
+    background: #faeeda;
+    color: #854f0b;
+    border: 1px solid #fac775;
+  }
+  .badge-costar {
+    background: var(--teal-light);
+    color: var(--teal);
+    border: 1px solid #9fe1cb;
+  }
+  .badge-entwicklung {
+    background: var(--blue-light);
+    color: var(--navy-mid);
+    border: 1px solid #b5d4f4;
+  }
+  .badge-iteration {
+    background: #eeedfe;
+    color: #3c3489;
+    border: 1px solid #afa9ec;
+  }
+  .prompt-title {
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+  .copy-btn {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--text-muted);
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 4px 10px;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .copy-btn:hover {
+    background: var(--blue-light);
+    color: var(--navy-mid);
+    border-color: #b5d4f4;
+  }
+  .copy-btn.copied {
+    background: var(--teal-light);
+    color: var(--teal);
+    border-color: #9fe1cb;
+  }
+  .copy-icon { font-size: 13px; }
+
+  .prompt-body {
+    padding: 1.25rem 1.5rem;
+  }
+  .prompt-desc {
+    font-size: 13.5px;
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+    font-style: italic;
+    line-height: 1.6;
+  }
+  .prompt-text {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
+    font-weight: 400;
+    line-height: 1.75;
+    color: var(--text-primary);
+    background: var(--code-bg);
+    border: 1px solid var(--border-light);
+    border-radius: 6px;
+    padding: 1rem 1.25rem;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  .prompt-text .label {
+    color: var(--blue-accent);
+    font-weight: 500;
+  }
+
+  /* ── Progression indicator ── */
+  .progression {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .prog-step {
+    font-size: 12px;
+    color: var(--text-muted);
+    padding: 3px 10px;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    background: var(--bg-white);
+  }
+  .prog-arrow {
+    color: var(--border);
+    font-size: 12px;
+  }
+
+  /* ── Download section ── */
+  .download-section {
+    margin-bottom: 3.5rem;
+  }
+  .download-card {
+    background: var(--navy);
+    border-radius: 10px;
+    padding: 1.75rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .download-info h3 {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 400;
+    font-size: 1.1rem;
+    color: #fff;
+    margin-bottom: 0.35rem;
+  }
+  .download-info p {
+    font-size: 13px;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.6;
+    max-width: 420px;
+  }
+  .download-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 6px;
+    padding: 9px 18px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13.5px;
+    font-weight: 400;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .download-btn:hover {
+    background: rgba(255,255,255,0.18);
+    border-color: rgba(255,255,255,0.35);
+  }
+
+  /* ── DSGVO note ── */
+  .dsgvo-note {
+    background: var(--teal-light);
+    border: 1px solid #9fe1cb;
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    font-size: 13.5px;
+    color: #085041;
+    line-height: 1.65;
+    margin-top: 1rem;
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+  }
+  .dsgvo-icon { font-size: 16px; margin-top: 2px; flex-shrink: 0; }
+
+  /* ── Divider ── */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border-light);
+    margin: 2.5rem 0;
+  }
+
+  /* ── Footer ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 2rem;
+    text-align: center;
+  }
+  .footer-inner {
+    max-width: 800px;
+    margin: 0 auto;
+    font-size: 12.5px;
+    color: var(--text-muted);
+    line-height: 1.8;
+  }
+  .footer-inner a {
+    color: var(--blue-accent);
+    text-decoration: none;
+  }
+  .footer-inner a:hover { text-decoration: underline; }
+
+  @media (max-width: 600px) {
+    header { padding: 2.5rem 1.25rem 2.25rem; }
+    main { padding: 2rem 1.25rem 4rem; }
+    .download-card { flex-direction: column; align-items: flex-start; }
+    .prompt-card-header { flex-wrap: wrap; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <p class="header-eyebrow">Dr. Frank Best · Essen · Mai 2026</p>
+    <h1>KI in der Diabetologie<br><em>Materialien zur Tutorial-Serie</em></h1>
+    <p class="header-meta">
+      Prompts und Python-Skripte aus den Folgen 1–4 &nbsp;·&nbsp;
+      <a href="https://www.youtube.com/@frankbest" target="_blank">YouTube-Kanal</a>
+    </p>
+  </div>
+</header>
+
+<main>
+
+  <div class="intro">
+    Diese Seite stellt die <strong>Prompts und Werkzeuge</strong> aus der Tutorial-Serie zur freien Verfügung.
+    Kopieren Sie die Prompts direkt in <a href="https://claude.ai" target="_blank" style="color:var(--blue-accent);">Claude</a>,
+    passen Sie sie an Ihre eigenen Fragestellungen an — und fangen Sie an.
+    Alle Anwendungen laufen <strong>lokal auf Ihrem Rechner</strong>. Keine Cloud. Keine Datenweitergabe. DSGVO-konform.
+  </div>
+
+  <!-- ── PORTRAIT ── -->
+  <div style="background:var(--bg-white); border:1px solid var(--border); border-radius:10px; padding:1.5rem; display:flex; align-items:center; gap:1.75rem; margin-bottom:3rem; flex-wrap:wrap;">
+    <img src="frank_best_portrait.jpg"
+         alt="Dr. Frank Best"
+         style="width:96px; height:96px; border-radius:50%; object-fit:cover; object-position:center top; flex-shrink:0; border:3px solid var(--border-light);">
+    <div>
+      <p style="font-family:'Source Serif 4',serif; font-weight:400; font-size:1.05rem; color:var(--navy); margin-bottom:0.3rem;">Dr. Frank Best</p>
+      <p style="font-size:13px; color:var(--text-muted); margin-bottom:0.6rem; font-weight:300;">Diabetologe · Essen · 40 Jahre Insulinpumpentherapie und CGM</p>
+      <p style="font-size:13.5px; color:var(--text-secondary); line-height:1.65; font-weight:300;">
+        Ich habe diese Tutorial-Serie entwickelt, weil ich überzeugt bin: Künstliche Intelligenz kann Ärzten und Beratern helfen — wenn man weiß, wie man sie anspricht. Alle Werkzeuge auf dieser Seite entstanden aus meiner eigenen klinischen Praxis.
+      </p>
+    </div>
+  </div>
+
+  <!-- ── FOLGE 2 ── -->
+  <div class="prompt-section">
+    <p class="section-label">Folge 2</p>
+    <h2 class="section-title">Die COSTAR-Methode</h2>
+    <p class="section-subtitle">Drei Prompts in aufsteigender Qualität — derselbe Auftrag, drei verschiedene Ergebnisse.</p>
+
+    <div class="progression">
+      <span class="prog-step">Anfänger-Prompt</span>
+      <span class="prog-arrow">→</span>
+      <span class="prog-step">Verbesserter Prompt</span>
+      <span class="prog-arrow">→</span>
+      <span class="prog-step">Vollständiger COSTAR-Prompt</span>
+    </div>
+
+    <!-- Prompt 2.1 -->
+    <div class="prompt-card">
+      <div class="prompt-card-header">
+        <div class="prompt-card-header-left">
+          <span class="prompt-badge badge-bad">Negativbeispiel</span>
+          <span class="prompt-title">Der schlechte Prompt</span>
+        </div>
+        <button class="copy-btn" onclick="copyPrompt(this, 'p2-1')">
+          <span class="copy-icon">⎘</span> Kopieren
+        </button>
+      </div>
+      <div class="prompt-body">
+        <p class="prompt-desc">Vage, ohne Kontext — die KI antwortet allgemein und unbrauchbar.</p>
+        <div class="prompt-text" id="p2-1">Kannst du mir meine CGM-Daten auswerten?</div>
+      </div>
+    </div>
+
+    <!-- Prompt 2.2 -->
+    <div class="prompt-card">
+      <div class="prompt-card-header">
+        <div class="prompt-card-header-left">
+          <span class="prompt-badge badge-better">Verbesserung</span>
+          <span class="prompt-title">Mit Kontext und Ziel</span>
+        </div>
+        <button class="copy-btn" onclick="copyPrompt(this, 'p2-2')">
+          <span class="copy-icon">⎘</span> Kopieren
+        </button>
+      </div>
+      <div class="prompt-body">
+        <p class="prompt-desc">Rolle, Datenformat und gewünschtes Ergebnis sind jetzt klar — deutlich bessere Antwort.</p>
+        <div class="prompt-text" id="p2-2">Ich bin Diabetologe. Ich habe CGM-Daten eines Patienten mit Typ-1-Diabetes als CSV-Datei.
+Die Daten enthalten Zeitstempel und Glukosewerte in mg/dL.
+Bitte analysiere die Daten und berechne:
+TIR, TBR, TAR, Mittelwert, Standardabweichung und CV.
+Präsentiere die Ergebnisse in einer übersichtlichen Tabelle.</div>
+      </div>
+    </div>
+
+    <!-- Prompt 2.3 -->
+    <div class="prompt-card">
+      <div class="prompt-card-header">
+        <div class="prompt-card-header-left">
+          <span class="prompt-badge badge-costar">COSTAR vollständig</span>
+          <span class="prompt-title">Der optimale Prompt</span>
+        </div>
+        <button class="copy-btn" onclick="copyPrompt(this, 'p2-3')">
+          <span class="copy-icon">⎘</span> Kopieren
+        </button>
+      </div>
+      <div class="prompt-body">
+        <p class="prompt-desc">Alle sechs COSTAR-Elemente — das Ergebnis ist strukturiert, präzise, klinisch verwertbar.</p>
+        <div class="prompt-text" id="p2-3"><span class="label">Context:</span> Ich bin Diabetologe mit langjähriger Erfahrung in der Insulinpumpentherapie.
+Ich werte CGM-Daten anonymisierter Patienten aus.
+
+<span class="label">Objective:</span> Bitte analysiere die beigefügten CGM-Daten
+und erstelle eine strukturierte klinische Auswertung.
+
+<span class="label">Style:</span> Klinisch präzise, evidenzbasiert.
+
+<span class="label">Tone:</span> Sachlich und professionell — wie ein ärztlicher Befundbericht.
+
+<span class="label">Audience:</span> Für mich als Facharzt — keine vereinfachten Erklärungen nötig.
+
+<span class="label">Response:</span> Tabellarische Übersicht der Kernparameter,
+gefolgt von einer kurzen klinischen Interpretation
+in maximal fünf Sätzen.</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ── FOLGE 3 ── -->
+  <div class="prompt-section">
+    <p class="section-label">Folge 3</p>
+    <h2 class="section-title">App-Entwicklung mit Claude</h2>
+    <p class="section-subtitle">So entstand der CGM-Validator — vom ersten Entwicklungs-Prompt bis zur Nachbesserung.</p>
+
+    <!-- Prompt 3.1 -->
+    <div class="prompt-card">
+      <div class="prompt-card-header">
+        <div class="prompt-card-header-left">
+          <span class="prompt-badge badge-entwicklung">Erster Prompt</span>
+          <span class="prompt-title">CGM-Validator — Version 1</span>
+        </div>
+        <button class="copy-btn" onclick="copyPrompt(this, 'p3-1')">
+          <span class="copy-icon">⎘</span> Kopieren
+        </button>
+      </div>
+      <div class="prompt-body">
+        <p class="prompt-desc">Der Startpunkt: COSTAR-Struktur, technische Rolle für Claude, klare Anforderungen — und als Audience explizit: ein Diabetologe ohne Programmierkenntnisse.</p>
+        <div class="prompt-text" id="p3-1"><span class="label">Context:</span> Du bist ein erfahrener Python-Entwickler mit Kenntnissen in medizinischen Datenformaten.
+
+<span class="label">Objective:</span> Erstelle eine Streamlit-App die CGM-Daten als CSV einliest und folgende Parameter berechnet: TIR, TBR, TAR, Mittelwert, Standardabweichung, CV und GMI.
+
+<span class="label">Style:</span> Sauberer, gut kommentierter Python-Code.
+
+<span class="label">Tone:</span> Professionell und präzise.
+
+<span class="label">Audience:</span> Ein Diabetologe ohne Programmierkenntnisse der die App lokal ausführt.
+
+<span class="label">Response:</span> Vollständiger, lauffähiger Python-Code für Streamlit.</div>
+      </div>
+    </div>
+
+    <!-- Prompt 3.2 -->
+    <div class="prompt-card">
+      <div class="prompt-card-header">
+        <div class="prompt-card-header-left">
+          <span class="prompt-badge badge-iteration">Nachbesserung</span>
+          <span class="prompt-title">Multi-Format-Detektor</span>
+        </div>
+        <button class="copy-btn" onclick="copyPrompt(this, 'p3-2')">
+          <span class="copy-icon">⎘</span> Kopieren
+        </button>
+      </div>
+      <div class="prompt-body">
+        <p class="prompt-desc">Iteration im laufenden Gespräch: kein neues COSTAR nötig — eine direkte, klare Anweisung reicht. Claude kennt bereits den Kontext.</p>
+        <div class="prompt-text" id="p3-2">Die App soll jetzt zusätzlich verschiedene CSV-Formate automatisch erkennen:
+Glooko, Abbott LibreView, Dexcom Clarity und Medtronic CareLink.
+
+In der EU sind die Hersteller verpflichtet,
+Nutzern ihre Daten zur Verfügung zu stellen —
+jeder tut das auf seine eigene Art.
+
+Bitte baue einen intelligenten Header-Detektor ein
+der das Format automatisch erkennt.</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ── DOWNLOAD ── -->
+  <div class="download-section">
+    <p class="section-label">Python-Skript</p>
+    <h2 class="section-title">CGM-Validator</h2>
+    <p class="section-subtitle">Die fertige Streamlit-Anwendung aus Folge 3 — lokal ausführbar, keine Installation außer Python.</p>
+
+    <div class="download-card">
+      <div class="download-info">
+        <h3>cgm_validator.py</h3>
+        <p>Streamlit-App · Python 3.10+ · Glooko, LibreView, Dexcom Clarity, CareLink · TIR/TBR/TAR/GMI/CV · lokale Ausführung</p>
+      </div>
+      <a class="download-btn" href="cgm_validator.py" download>
+        ⬇ Herunterladen
+      </a>
+    </div>
+
+    <div class="dsgvo-note">
+      <span class="dsgvo-icon">🔒</span>
+      <span>
+        <strong>Datenschutz:</strong> Die App läuft vollständig lokal auf Ihrem Rechner.
+        Keine Patientendaten verlassen Ihr System. Keine Cloud-Verbindung. DSGVO-konform.
+        Für den klinischen Einsatz mit echten Patientendaten ist dies die empfohlene Betriebsart.
+      </span>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ── HINWEIS ── -->
+  <div style="font-size:13.5px; color:var(--text-secondary); line-height:1.8;">
+    <p style="margin-bottom:0.5rem;">
+      <strong style="color:var(--text-primary); font-weight:500;">Zur Verwendung der Prompts:</strong>
+      Kopieren Sie den gewünschten Prompt in <a href="https://claude.ai" target="_blank" style="color:var(--blue-accent);">claude.ai</a>
+      und ersetzen Sie die kursiven Platzhalter durch Ihre eigenen Daten oder Fragestellungen.
+      Fügen Sie Ihre CGM-CSV-Datei direkt im Chat als Anhang hinzu.
+    </p>
+    <p>
+      <strong style="color:var(--text-primary); font-weight:500;">Hinweis zu Folge 4:</strong>
+      Die Folge zur Signalverarbeitungsanalyse (Frequenzanalyse, Wavelet-Transformation) enthält
+      keine interaktiven Prompts — sie dokumentiert eigene Forschungsarbeit mit Python-Skripten,
+      die auf Anfrage zur Verfügung gestellt werden.
+    </p>
+  </div>
+
+</main>
+
+<footer>
+  <div class="footer-inner">
+    Dr. Frank Best · Diabetologe · Essen ·
+    Tutorial-Serie „KI in der Diabetologie" ·
+    <a href="https://www.youtube.com/@frankbest" target="_blank">YouTube</a><br>
+    <span style="opacity:0.6;">Diese Materialien stehen zur freien nicht-kommerziellen Verwendung zur Verfügung.</span>
+  </div>
+</footer>
+
+<script>
+function copyPrompt(btn, id) {
+  const el = document.getElementById(id);
+  const text = el.innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    btn.classList.add('copied');
+    btn.innerHTML = '<span class="copy-icon">✓</span> Kopiert';
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      btn.innerHTML = '<span class="copy-icon">⎘</span> Kopieren';
+    }, 2000);
+  });
+}
+</script>
+
+</body>
+</html>
